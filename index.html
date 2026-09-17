@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zaid's Grade 7 Math Zone</title>
+<style>
+  :root {
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --ink: #1f2937;
+    --muted: #6b7280;
+    --primary: #4f46e5;
+    --primary-dark: #4338ca;
+    --accent: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --radius: 16px;
+    --shadow: 0 6px 20px rgba(31,41,55,.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary), #7c3aed);
+    color: #fff;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    box-shadow: 0 4px 14px rgba(79,70,229,.3);
+  }
+  header .logo { font-size: 1.4rem; font-weight: 800; letter-spacing: .5px; }
+  header .logo span { color: var(--accent); }
+  header .sub { font-size: .85rem; opacity: .9; }
+  .progress-pill {
+    background: rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.35);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: .9rem;
+    font-weight: 600;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    background: var(--card);
+    padding: 10px 16px;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  nav button {
+    border: none;
+    background: transparent;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  nav button:hover { background: #eef2ff; color: var(--primary); }
+  nav button.active { background: var(--primary); color: #fff; }
+  main { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+  .view { display: none; }
+  .view.active { display: block; animation: fade .25s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px);} to {opacity:1; transform:none;} }
+
+  .hero {
+    background: linear-gradient(135deg, #eef2ff, #fdf4ff);
+    border-radius: var(--radius);
+    padding: 32px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+  .hero h1 { font-size: 2rem; margin-bottom: 8px; }
+  .hero p { color: var(--muted); max-width: 620px; margin: 0 auto; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    border: 1px solid #eef0f4;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(31,41,55,.12); }
+  .card .emoji { font-size: 2.2rem; }
+  .card h3 { margin: 8px 0 4px; font-size: 1.1rem; }
+  .card p { color: var(--muted); font-size: .9rem; }
+  .card .done { color: var(--green); font-weight: 700; font-size: .85rem; }
+
+  .lesson-card, .quiz-box {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 26px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
+  .lesson-card h2 { margin-bottom: 12px; }
+  .lesson-card h3 { margin: 18px 0 8px; color: var(--primary-dark); }
+  .example {
+    background: #f8fafc;
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 10px 0;
+  }
+  .example .lbl { font-weight: 700; color: var(--accent); }
+  .tip {
+    background: #ecfdf5;
+    border-left: 4px solid var(--green);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 10px 0;
+  }
+  .tip .lbl { font-weight: 700; color: var(--green); }
+  .back-btn {
+    background: transparent;
+    border: 1px solid #d1d5db;
+    color: var(--muted);
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .back-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+  .practice-box {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 26px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .practice-box .q { font-size: 1.4rem; font-weight: 700; margin: 16px 0; }
+  .practice-box input {
+    font-size: 1.2rem;
+    padding: 10px 14px;
+    border: 2px solid #d1d5db;
+    border-radius: 10px;
+    width: 200px;
+    text-align: center;
+    margin: 8px 0;
+  }
+  .practice-box input:focus { outline: none; border-color: var(--primary); }
+  .btn {
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 6px;
+    transition: background .15s;
+  }
+  .btn:hover { background: var(--primary-dark); }
+  .btn.ghost { background: #eef2ff; color: var(--primary); }
+  .btn.ghost:hover { background: #e0e7ff; }
+  .feedback { font-size: 1.1rem; font-weight: 700; margin: 12px 0; min-height: 28px; }
+  .feedback.correct { color: var(--green); }
+  .feedback.wrong { color: var(--red); }
+  .streak { color: var(--muted); font-size: .9rem; }
+
+  .quiz-box .q-title { font-weight: 700; margin-bottom: 6px; }
+  .quiz-box .q-text { font-size: 1.2rem; margin: 10px 0; }
+  .quiz-box .options { display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+  .quiz-box .opt {
+    border: 2px solid #d1d5db;
+    background: #fff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1rem;
+    transition: all .15s;
+  }
+  .quiz-box .opt:hover { border-color: var(--primary); background: #eef2ff; }
+  .quiz-box .opt.selected { border-color: var(--primary); background: #eef2ff; font-weight: 600; }
+  .quiz-box .opt.correct { border-color: var(--green); background: #ecfdf5; }
+  .quiz-box .opt.wrong { border-color: var(--red); background: #fef2f2; }
+  .result { text-align: center; padding: 20px; }
+  .result h2 { margin-bottom: 10px; }
+  .score-big { font-size: 3rem; font-weight: 800; color: var(--primary); }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; margin-bottom: 24px; }
+  .stat { background: var(--card); border-radius: var(--radius); padding: 20px; text-align: center; box-shadow: var(--shadow); }
+  .stat .num { font-size: 2rem; font-weight: 800; color: var(--primary); }
+  .stat .lbl { color: var(--muted); font-size: .9rem; }
+  .bar-wrap { background: #eef0f4; border-radius: 999px; height: 12px; overflow: hidden; }
+  .bar { background: linear-gradient(90deg, var(--primary), #7c3aed); height: 100%; border-radius: 999px; transition: width .4s; }
+  .topic-row { background: var(--card); border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; box-shadow: var(--shadow); }
+  .topic-row .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .topic-row .top h4 { font-size: 1rem; }
+  .topic-row .top .pct { font-weight: 700; color: var(--primary); }
+  .reset-btn { background: #fee2e2; color: var(--red); border: none; padding: 10px 18px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+  .reset-btn:hover { background: #fecaca; }
+  .footer { text-align: center; color: var(--muted); padding: 24px; font-size: .85rem; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="logo">Zaid's <span>Math</span> Zone</div>
+    <div class="sub">Grade 7 • Learn • Practice • Play</div>
+  </div>
+  <div class="progress-pill" id="headerProgress">⭐ 0% complete</div>
+</header>
+
+<nav>
+  <button data-view="home" class="active">🏠 Home</button>
+  <button data-view="topics">📚 Topics</button>
+  <button data-view="practice">✏️ Practice</button>
+  <button data-view="quiz">🧠 Quiz</button>
+  <button data-view="progress">📈 My Progress</button>
+</nav>
+
+<main>
+  <!-- HOME -->
+  <section class="view active" id="view-home">
+    <div class="hero">
+      <h1>Hi, Zaid! 👋 Ready to become a math superstar?</h1>
+      <p>Explore fun lessons, solve practice problems, take quizzes, and track your progress. Every topic you finish earns you stars! Let's go! 🚀</p>
+    </div>
+    <div class="grid" id="homeGrid"></div>
+  </section>
+
+  <!-- TOPICS -->
+  <section class="view" id="view-topics">
+    <div class="grid" id="topicsGrid"></div>
+  </section>
+
+  <!-- LESSON (rendered dynamically) -->
+  <section class="view" id="view-lesson">
+    <button class="back-btn" onclick="showView('topics')">← Back to Topics</button>
+    <div id="lessonContent"></div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section class="view" id="view-practice">
+    <div class="practice-box" id="practiceBox"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="view" id="view-quiz">
+    <div id="quizContent"></div>
+  </section>
+
+  <!-- PROGRESS -->
+  <section class="view" id="view-progress">
+    <h2 style="margin-bottom:16px;">📈 Your Progress</h2>
+    <div class="stats-grid" id="statsGrid"></div>
+    <div id="topicProgress"></div>
+    <div style="margin-top:20px;">
+      <button class="reset-btn" onclick="resetProgress()">Reset All Progress</button>
+    </div>
+  </section>
+</main>
+
+<div class="footer">Made with ❤️ for Zaid • Grade 7 Math • Your progress is saved on this device</div>
+
+<script>
+/* ================= DATA ================= */
+const TOPICS = [
+  {
+    id: "integers", emoji: "➖", title: "Integers",
+    desc: "Positive and negative numbers, adding & subtracting.",
+    lesson: `
+      <h2>Integers</h2>
+      <p>Integers are whole numbers and their opposites: <b>... -3, -2, -1, 0, 1, 2, 3 ...</b>. Negative numbers are less than zero.</p>
+      <div class="example"><span class="lbl">Example:</span> The temperature drops from 5°C to -3°C. That's a change of 8 degrees!</div>
+      <h3>Adding & Subtracting</h3>
+      <p>Think of a number line. Adding a positive moves right; adding a negative moves left.</p>
+      <div class="example"><span class="lbl">Example:</span> -4 + 7 = 3 (start at -4, move 7 right).</div>
+      <div class="example"><span class="lbl">Example:</span> 3 - 8 = -5 (start at 3, move 8 left).</div>
+      <h3>Multiplying & Dividing</h3>
+      <div class="tip"><span class="lbl">Rule:</span> Same signs → positive. Different signs → negative.</div>
+      <div class="example"><span class="lbl">Example:</span> (-3) × (-4) = 12 &nbsp;•&nbsp; (-3) × 4 = -12 &nbsp;•&nbsp; 12 ÷ (-3) = -4</div>
+    `,
+    practice: [
+      { q: "-6 + 9 = ?", a: "3" },
+      { q: "4 - 10 = ?", a: "-6" },
+      { q: "(-5) × 3 = ?", a: "-15" },
+      { q: "(-7) + (-3) = ?", a: "-10" },
+      { q: "(-8) ÷ (-2) = ?", a: "4" },
+      { q: "12 - (-5) = ?", a: "17" }
+    ],
+    quiz: [
+      { q: "What is -9 + 4?", options: ["-13", "-5", "5", "13"], a: 1 },
+      { q: "What is 6 - (-2)?", options: ["4", "-4", "8", "-8"], a: 2 },
+      { q: "(-6) × (-3) = ?", options: ["-18", "18", "-9", "9"], a: 1 },
+      { q: "Which number is the smallest?", options: ["-10", "-2", "0", "3"], a: 0 },
+      { q: "(-20) ÷ 4 = ?", options: ["5", "-5", "-16", "16"], a: 1 }
+    ]
+  },
+  {
+    id: "rational", emoji: "🧮", title: "Rational Numbers",
+    desc: "Fractions, decimals, and comparing numbers.",
+    lesson: `
+      <h2>Rational Numbers</h2>
+      <p>A rational number is any number that can be written as a fraction <b>a/b</b> where a and b are integers (b ≠ 0). This includes fractions, decimals, and whole numbers.</p>
+      <div class="example"><span class="lbl">Example:</span> 1/2 = 0.5, &nbsp;3/4 = 0.75, &nbsp;2 = 2/1</div>
+      <h3>Adding Fractions</h3>
+      <p>Get a common denominator, then add the numerators.</p>
+      <div class="example"><span class="lbl">Example:</span> 1/3 + 1/6 = 2/6 + 1/6 = 3/6 = 1/2</div>
+      <h3>Converting</h3>
+      <div class="tip"><span class="lbl">Tip:</span> To turn a fraction into a decimal, divide the top by the bottom. 3 ÷ 4 = 0.75.</div>
+    `,
+    practice: [
+      { q: "1/2 + 1/4 = ? (as a fraction)", a: "3/4" },
+      { q: "0.5 + 0.25 = ?", a: "0.75" },
+      { q: "What is 3/4 as a decimal?", a: "0.75" },
+      { q: "1/3 + 1/3 = ? (as a fraction)", a: "2/3" },
+      { q: "0.6 + 0.4 = ?", a: "1" },
+      { q: "Which is bigger, 0.3 or 0.25?", a: "0.3" }
+    ],
+    quiz: [
+      { q: "1/2 + 1/2 = ?", options: ["1/4", "1", "2/4", "2"], a: 1 },
+      { q: "What is 1/4 as a decimal?", options: ["0.25", "0.4", "0.5", "0.14"], a: 0 },
+      { q: "0.75 + 0.25 = ?", options: ["0.9", "1", "1.1", "0.95"], a: 1 },
+      { q: "Which is the largest?", options: ["0.5", "0.45", "0.55", "0.49"], a: 2 },
+      { q: "2/3 + 1/3 = ?", options: ["3/6", "1", "3/3", "1/3"], a: 1 }
+    ]
+  },
+  {
+    id: "ratios", emoji: "⚖️", title: "Ratios & Proportions",
+    desc: "Comparing amounts and solving proportions.",
+    lesson: `
+      <h2>Ratios & Proportions</h2>
+      <p>A <b>ratio</b> compares two quantities. It can be written as a:b, a to b, or a/b.</p>
+      <div class="example"><span class="lbl">Example:</span> 3 apples to 2 oranges = 3:2</div>
+      <h3>Proportions</h3>
+      <p>A <b>proportion</b> says two ratios are equal. Solve by cross-multiplying.</p>
+      <div class="example"><span class="lbl">Example:</span> x/4 = 6/8 → cross multiply: 8x = 24 → x = 3</div>
+      <div class="tip"><span class="lbl">Tip:</span> Cross multiply: multiply diagonally and set equal.</div>
+    `,
+    practice: [
+      { q: "Solve: x/3 = 4/6. What is x?", a: "2" },
+      { q: "Solve: 5/10 = x/2. What is x?", a: "1" },
+      { q: "A ratio of 2:3. If the first part is 4, what is the second?", a: "6" },
+      { q: "Solve: x/5 = 6/10. What is x?", a: "3" },
+      { q: "Solve: 3/x = 6/8. What is x?", a: "4" }
+    ],
+    quiz: [
+      { q: "Solve: x/2 = 6/4", options: ["2", "3", "4", "6"], a: 1 },
+      { q: "Solve: 4/8 = x/2", options: ["1", "2", "4", "8"], a: 0 },
+      { q: "A ratio of 1:2. First part is 5, second is?", options: ["5", "10", "2.5", "15"], a: 1 },
+      { q: "Solve: x/6 = 5/10", options: ["2", "3", "4", "5"], a: 1 },
+      { q: "Solve: 9/x = 3/4", options: ["9", "12", "6", "3"], a: 1 }
+    ]
+  },
+  {
+    id: "percent", emoji: "💯", title: "Percentages",
+    desc: "Percent of a number, discounts, and interest.",
+    lesson: `
+      <h2>Percentages</h2>
+      <p>Percent means <b>"out of 100"</b>. To find a percent of a number, convert the percent to a decimal and multiply.</p>
+      <div class="example"><span class="lbl">Example:</span> 25% of 80 = 0.25 × 80 = 20</div>
+      <h3>Discounts</h3>
+      <div class="example"><span class="lbl">Example:</span> A $50 shirt is 20% off. Discount = 0.20 × 50 = $10. New price = $40.</div>
+      <div class="tip"><span class="lbl">Tip:</span> 10% of a number = move the decimal one place left. 10% of 60 = 6.</div>
+    `,
+    practice: [
+      { q: "What is 50% of 40?", a: "20" },
+      { q: "What is 25% of 60?", a: "15" },
+      { q: "What is 10% of 90?", a: "9" },
+      { q: "What is 100% of 37?", a: "37" },
+      { q: "What is 50% of 120?", a: "60" }
+    ],
+    quiz: [
+      { q: "What is 25% of 80?", options: ["20", "25", "40", "10"], a: 0 },
+      { q: "What is 50% of 90?", options: ["45", "90", "30", "50"], a: 0 },
+      { q: "A $40 item is 25% off. New price?", options: ["$30", "$35", "$20", "$10"], a: 0 },
+      { q: "What is 10% of 250?", options: ["25", "2.5", "250", "50"], a: 0 },
+      { q: "What is 100% of 8?", options: ["8", "80", "0.8", "16"], a: 0 }
+    ]
+  },
+  {
+    id: "algebra", emoji: "🔤", title: "Algebra Basics",
+    desc: "Variables, expressions, and solving equations.",
+    lesson: `
+      <h2>Algebra Basics</h2>
+      <p>Algebra uses <b>variables</b> (letters) to stand for unknown numbers. An expression like <b>3x + 2</b> means "3 times x, plus 2."</p>
+      <h3>Solving Equations</h3>
+      <p>To solve an equation, get the variable alone on one side by doing the same operation to both sides.</p>
+      <div class="example"><span class="lbl">Example:</span> x + 5 = 12 → subtract 5 from both sides → x = 7</div>
+      <div class="example"><span class="lbl">Example:</span> 3x = 21 → divide both sides by 3 → x = 7</div>
+      <div class="tip"><span class="lbl">Tip:</span> What you do to one side, you MUST do to the other!</div>
+    `,
+    practice: [
+      { q: "Solve: x + 3 = 10. What is x?", a: "7" },
+      { q: "Solve: x - 4 = 6. What is x?", a: "10" },
+      { q: "Solve: 2x = 14. What is x?", a: "7" },
+      { q: "Solve: x + 8 = 15. What is x?", a: "7" },
+      { q: "Solve: x/3 = 5. What is x?", a: "15" }
+    ],
+    quiz: [
+      { q: "Solve: x + 4 = 11", options: ["7", "15", "6", "8"], a: 0 },
+      { q: "Solve: 3x = 18", options: ["6", "15", "21", "9"], a: 0 },
+      { q: "Solve: x - 6 = 2", options: ["4", "8", "-4", "12"], a: 1 },
+      { q: "Solve: x/4 = 3", options: ["7", "12", "1", "9"], a: 1 },
+      { q: "Solve: x + 9 = 20", options: ["11", "29", "10", "9"], a: 0 }
+    ]
+  },
+  {
+    id: "geometry", emoji: "📐", title: "Geometry",
+    desc: "Angles, triangles, area, and perimeter.",
+    lesson: `
+      <h2>Geometry</h2>
+      <p>Geometry is the study of shapes, sizes, and angles.</p>
+      <h3>Angles in a Triangle</h3>
+      <div class="tip"><span class="lbl">Rule:</span> The angles of any triangle add up to <b>180°</b>.</div>
+      <div class="example"><span class="lbl">Example:</span> A triangle has angles 50° and 60°. The third = 180 - 50 - 60 = 70°.</div>
+      <h3>Area Formulas</h3>
+      <div class="example"><span class="lbl">Rectangle:</span> Area = length × width</div>
+      <div class="example"><span class="lbl">Triangle:</span> Area = (base × height) ÷ 2</div>
+      <div class="example"><span class="lbl">Circle:</span> Area = π × r² &nbsp;•&nbsp; Circumference = 2πr</div>
+    `,
+    practice: [
+      { q: "Angles of a triangle are 60° and 70°. Third angle?", a: "50" },
+      { q: "Rectangle: length 6, width 4. Area?", a: "24" },
+      { q: "Triangle: base 8, height 5. Area?", a: "20" },
+      { q: "Angles of a triangle are 45° and 45°. Third angle?", a: "90" },
+      { q: "Square with side 5. Area?", a: "25" }
+    ],
+    quiz: [
+      { q: "Angles of a triangle: 40° and 60°. Third?", options: ["80°", "90°", "100°", "70°"], a: 0 },
+      { q: "Rectangle 5 × 3. Area?", options: ["8", "15", "16", "10"], a: 1 },
+      { q: "Triangle base 6, height 4. Area?", options: ["24", "12", "10", "20"], a: 1 },
+      { q: "Angles of a triangle: 30° and 60°. Third?", options: ["60°", "90°", "80°", "70°"], a: 1 },
+      { q: "Square side 7. Area?", options: ["14", "28", "49", "35"], a: 2 }
+    ]
+  },
+  {
+    id: "stats", emoji: "📊", title: "Statistics & Probability",
+    desc: "Mean, median, mode, and chance.",
+    lesson: `
+      <h2>Statistics & Probability</h2>
+      <h3>Mean, Median, Mode</h3>
+      <div class="example"><span class="lbl">Mean:</span> Add all numbers, divide by how many. Data: 2, 4, 6 → mean = 12/3 = 4</div>
+      <div class="example"><span class="lbl">Median:</span> The middle number when sorted. Data: 3, 1, 2 → sorted 1, 2, 3 → median = 2</div>
+      <div class="example"><span class="lbl">Mode:</span> The number that appears most often.</div>
+      <h3>Probability</h3>
+      <div class="tip"><span class="lbl">Formula:</span> Probability = (favorable outcomes) ÷ (total outcomes)</div>
+      <div class="example"><span class="lbl">Example:</span> Rolling a 4 on a 6-sided die: 1/6.</div>
+    `,
+    practice: [
+      { q: "Mean of 2, 4, 6?", a: "4" },
+      { q: "Median of 5, 1, 3?", a: "3" },
+      { q: "Mean of 10, 20, 30?", a: "20" },
+      { q: "Median of 4, 9, 1?", a: "4" },
+      { q: "Probability of heads on a coin flip (as fraction)?", a: "1/2" }
+    ],
+    quiz: [
+      { q: "Mean of 3, 5, 7?", options: ["5", "6", "4", "15"], a: 0 },
+      { q: "Median of 8, 2, 5?", options: ["8", "2", "5", "6"], a: 2 },
+      { q: "Mode of 2, 2, 3, 4?", options: ["2", "3", "4", "2.75"], a: 0 },
+      { q: "Probability of rolling a 6 on a die?", options: ["1/6", "1/2", "1/3", "6"], a: 0 },
+      { q: "Mean of 4, 4, 10?", options: ["6", "4", "10", "18"], a: 0 }
+    ]
+  },
+  {
+    id: "expressions", emoji: "🔢", title: "Expressions & Order",
+    desc: "Order of operations and evaluating expressions.",
+    lesson: `
+      <h2>Expressions & Order of Operations</h2>
+      <p>Use <b>PEMDAS</b> to know the order: <b>P</b>arentheses, <b>E</b>xponents, <b>M</b>ultiplication/<b>D</b>ivision (left to right), <b>A</b>ddition/<b>S</b>ubtraction (left to right).</p>
+      <div class="example"><span class="lbl">Example:</span> 2 + 3 × 4 = 2 + 12 = 14 (multiply first!)</div>
+      <div class="example"><span class="lbl">Example:</span> (2 + 3) × 4 = 5 × 4 = 20 (parentheses first)</div>
+      <div class="tip"><span class="lbl">Tip:</span> "Please Excuse My Dear Aunt Sally" helps you remember PEMDAS.</div>
+    `,
+    practice: [
+      { q: "2 + 3 × 4 = ?", a: "14" },
+      { q: "(2 + 3) × 4 = ?", a: "20" },
+      { q: "10 - 2 × 3 = ?", a: "4" },
+      { q: "6 ÷ 2 + 1 = ?", a: "4" },
+      { q: "5 × (2 + 1) = ?", a: "15" }
+    ],
+    quiz: [
+      { q: "3 + 4 × 2 = ?", options: ["14", "11", "10", "20"], a: 1 },
+      { q: "(3 + 4) × 2 = ?", options: ["14", "11", "10", "20"], a: 0 },
+      { q: "8 - 2 × 3 = ?", options: ["18", "6", "2", "12"], a: 2 },
+      { q: "10 ÷ 2 + 3 = ?", options: ["5", "8", "2", "15"], a: 1 },
+      { q: "4 × (1 + 2) = ?", options: ["7", "12", "9", "10"], a: 1 }
+    ]
+  }
+];
+
+/* ================= STATE ================= */
+const STORE_KEY = "zaidMathProgress";
+let state = { topics: {}, practiceBest: {}, quizzes: {} };
+function loadState() {
+  try { state = JSON.parse(localStorage.getItem(STORE_KEY)) || state; } catch(e) {}
+}
+function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+
+/* ================= NAV ================= */
+const views = ["home","topics","lesson","practice","quiz","progress"];
+function showView(name) {
+  views.forEach(v => {
+    const el = document.getElementById("view-" + v);
+    if (el) el.classList.toggle("active", v === name);
+  });
+  document.querySelectorAll("nav button").forEach(b => {
+    b.classList.toggle("active", b.dataset.view === name || (name === "lesson" && b.dataset.view === "topics"));
+  });
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+document.querySelectorAll("nav button").forEach(b => {
+  b.addEventListener("click", () => {
+    if (b.dataset.view === "practice") openPractice();
+    else if (b.dataset.view === "quiz") openQuiz();
+    else showView(b.dataset.view);
+  });
+});
+
+/* ================= HOME & TOPICS ================= */
+function topicCard(t, extra) {
+  const done = state.topics[t.id];
+  return `<div class="card" onclick="openLesson('${t.id}')">
+    <div class="emoji">${t.emoji}</div>
+    <h3>${t.title}</h3>
+    <p>${t.desc}</p>
+    ${done ? `<div class="done">✅ Lesson completed</div>` : ""}
+  </div>`;
+}
+function renderHome() {
+  document.getElementById("homeGrid").innerHTML = TOPICS.map(t => topicCard(t)).join("");
+}
+function renderTopics() {
+  document.getElementById("topicsGrid").innerHTML = TOPICS.map(t => topicCard(t)).join("");
+}
+
+/* ================= LESSON ================= */
+function openLesson(id) {
+  const t = TOPICS.find(x => x.id === id);
+  document.getElementById("lessonContent").innerHTML = `
+    <div class="lesson-card">
+      <div class="emoji" style="font-size:2.5rem;">${t.emoji}</div>
+      ${t.lesson}
+      <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn" onclick="markDone('${t.id}')">✅ Mark as Done</button>
+        <button class="btn ghost" onclick="openPractice('${t.id}')">✏️ Practice This Topic</button>
+      </div>
+    </div>`;
+  showView("lesson");
+}
+function markDone(id) {
+  state.topics[id] = true;
+  saveState();
+  updateHeader();
+  renderHome(); renderTopics(); renderProgress();
+  showView("topics");
+}
+
+/* ================= PRACTICE ================= */
+let practiceTopic = null;
+let practiceIdx = 0;
+let practiceStreak = 0;
+function openPractice(topicId) {
+  practiceTopic = topicId ? TOPICS.find(x => x.id === topicId) : null;
+  practiceIdx = 0;
+  practiceStreak = 0;
+  renderPractice();
+  showView("practice");
+}
+function renderPractice() {
+  const pool = practiceTopic ? practiceTopic.practice : TOPICS.flatMap(t => t.practice);
+  const q = pool[practiceIdx % pool.length];
+  document.getElementById("practiceBox").innerHTML = `
+    <div class="streak">🔥 Streak: ${practiceStreak} &nbsp;•&nbsp; Question ${(practiceIdx % pool.length)+1} of ${pool.length}</div>
+    <div class="q">${q.q}</div>
+    <input id="pInput" type="text" autocomplete="off" placeholder="Your answer">
+    <div>
+      <button class="btn" onclick="checkPractice()">Check ✓</button>
+      <button class="btn ghost" onclick="nextPractice()">Skip →</button>
+    </div>
+    <div class="feedback" id="pFeedback"></div>`;
+  document.getElementById("pInput").focus();
+  document.getElementById("pInput").addEventListener("keydown", e => { if (e.key === "Enter") checkPractice(); });
+}
+function checkPractice() {
+  const pool = practiceTopic ? practiceTopic.practice : TOPICS.flatMap(t => t.practice);
+  const q = pool[practiceIdx % pool.length];
+  const val = document.getElementById("pInput").value.trim().toLowerCase();
+  const fb = document.getElementById("pFeedback");
+  if (val === q.a.toLowerCase()) {
+    practiceStreak++;
+    fb.className = "feedback correct";
+    fb.textContent = "🎉 Correct! Great job!";
+    // record best streak
+    const key = practiceTopic ? practiceTopic.id : "all";
+    state.practiceBest[key] = Math.max(state.practiceBest[key] || 0, practiceStreak);
+    saveState();
+    setTimeout(() => nextPractice(), 700);
+  } else {
+    practiceStreak = 0;
+    fb.className = "feedback wrong";
+    fb.textContent = `❌ Not quite. The answer is ${q.a}. Try the next one!`;
+  }
+}
+function nextPractice() {
+  practiceIdx++;
+  renderPractice();
+}
+
+/* ================= QUIZ ================= */
+let quizTopic = null;
+let quizIdx = 0;
+let quizScore = 0;
+function openQuiz(topicId) {
+  quizTopic = topicId ? TOPICS.find(x => x.id === topicId) : null;
+  quizIdx = 0;
+  quizScore = 0;
+  renderQuiz();
+  showView("quiz");
+}
+function renderQuiz() {
+  const pool = quizTopic ? quizTopic.quiz : TOPICS.flatMap(t => t.quiz);
+  if (quizIdx >= pool.length) { renderQuizResult(pool.length); return; }
+  const q = pool[quizIdx];
+  document.getElementById("quizContent").innerHTML = `
+    <div class="quiz-box">
+      <div class="q-title">${quizTopic ? quizTopic.title : "Mixed Quiz"} • Question ${quizIdx+1} of ${pool.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options" id="qOptions">
+        ${q.options.map((o,i) => `<button class="opt" onclick="answerQuiz(${i}, ${quizIdx})">${o}</button>`).join("")}
+      </div>
+      <div class="feedback" id="qFeedback"></div>
+    </div>`;
+}
+function answerQuiz(choice, qIdx) {
+  const pool = quizTopic ? quizTopic.quiz : TOPICS.flatMap(t => t.quiz);
+  const q = pool[qIdx];
+  const opts = document.querySelectorAll("#qOptions .opt");
+  opts.forEach((o,i) => {
+    o.disabled = true;
+    if (i === q.a) o.classList.add("correct");
+    if (i === choice && choice !== q.a) o.classList.add("wrong");
+  });
+  const fb = document.getElementById("qFeedback");
+  if (choice === q.a) {
+    quizScore++;
+    fb.className = "feedback correct";
+    fb.textContent = "✅ Correct!";
+  } else {
+    fb.className = "feedback wrong";
+    fb.textContent = `❌ The correct answer is ${q.options[q.a]}.`;
+  }
+  setTimeout(() => { quizIdx++; renderQuiz(); }, 900);
+}
+function renderQuizResult(total) {
+  const pct = Math.round((quizScore/total)*100);
+  const key = quizTopic ? quizTopic.id : "all";
+  state.quizzes[key] = Math.max(state.quizzes[key] || 0, pct);
+  saveState();
+  const msg = pct === 100 ? "🏆 PERFECT SCORE! You're a math genius!" :
+              pct >= 70 ? "🌟 Great job! Keep it up!" :
+              pct >= 50 ? "👍 Good effort! Try again!" :
+              "💪 Don't give up! Practice makes perfect!";
+  document.getElementById("quizContent").innerHTML = `
+    <div class="quiz-box result">
+      <h2>${msg}</h2>
+      <div class="score-big">${quizScore}/${total}</div>
+      <p style="color:var(--muted); margin:8px 0 16px;">That's ${pct}%</p>
+      <button class="btn" onclick="openQuiz('${quizTopic ? quizTopic.id : ""}')">🔄 Try Again</button>
+      <button class="btn ghost" onclick="showView('topics')">📚 More Topics</button>
+    </div>`;
+  renderProgress(); updateHeader();
+}
+
+/* ================= PROGRESS ================= */
+function updateHeader() {
+  const total = TOPICS.length;
+  const done = TOPICS.filter(t => state.topics[t.id]).length;
+  const pct = Math.round((done/total)*100);
+  document.getElementById("headerProgress").textContent = `⭐ ${pct}% complete`;
+}
+function renderProgress() {
+  const pct = n => Math.round(n*100);
+  document.getElementById("statsGrid").innerHTML = `
+    <div class="stat"><div class="num">${TOPICS.filter(t=>state.topics[t.id]).length}</div><div class="lbl">Lessons Done</div></div>
+    <div class="stat"><div class="num">${Object.keys(state.quizzes).length}</div><div class="lbl">Quizzes Taken</div></div>
+    <div class="stat"><div class="num">${Math.max(0,...Object.values(state.practiceBest))}</div><div class="lbl">Best Streak</div></div>
+    <div class="stat"><div class="num">${pct(TOPICS.filter(t=>state.topics[t.id]).length/TOPICS.length)}%</div><div class="lbl">Overall</div></div>`;
+  document.getElementById("topicProgress").innerHTML = TOPICS.map(t => {
+    const lesson = state.topics[t.id] ? 100 : 0;
+    const quiz = state.quizzes[t.id] || 0;
+    const overall = Math.round((lesson + quiz)/2);
+    return `<div class="topic-row">
+      <div class="top">
+        <h4>${t.emoji} ${t.title}</h4>
+        <span class="pct">${overall}%</span>
+      </div>
+      <div class="bar-wrap"><div class="bar" style="width:${overall}%"></div></div>
+    </div>`;
+  }).join("");
+}
+function resetProgress() {
+  if (confirm("Are you sure you want to erase all progress?")) {
+    state = { topics: {}, practiceBest: {}, quizzes: {} };
+    saveState();
+    updateHeader(); renderHome(); renderTopics(); renderProgress();
+  }
+}
+
+/* ================= INIT ================= */
+loadState();
+renderHome();
+renderTopics();
+renderProgress();
+updateHeader();
+</script>
+</body>
+</html>
